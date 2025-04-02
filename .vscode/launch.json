@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/cygwin64/home/mine1/ASPZ/.vscode",
-      "program": "c:/cygwin64/home/mine1/ASPZ/.vscode/build/Debug/outDebug",
+      "cwd": "c:/cygwin64/home/mine1/ASPZ/pr2",
+      "program": "c:/cygwin64/home/mine1/ASPZ/pr2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
