@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_FILE_SIZE 1048576 
+#define MAX_FILE_SIZE 1024 * 1024 
 
 void write_rolls_to_file(const char *filename) {
     FILE *file = fopen(filename, "a");
