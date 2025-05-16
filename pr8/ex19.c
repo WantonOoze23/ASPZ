@@ -28,20 +28,20 @@ int main() {
     }
     memset(buffer, 'A', BUFFER_SIZE);
 
-    printf("Починаємо запис у файл...\n");
+    printf("Starting to write to file...\n");
 
     while (1) {
         bytes_written = write(fd, buffer, BUFFER_SIZE);
         if (bytes_written == -1) {
-            fprintf(stderr, "Помилка write(): %s (errno=%d)\n", strerror(errno), errno);
+            fprintf(stderr, "write() error: %s (errno=%d)\n", strerror(errno), errno);
             if (errno == ENOSPC) {
-                printf("Дисковий простір закінчився (ENOSPC).\n");
+                printf("Disk space is full (ENOSPC).\n");
             }
             break;
         }
 
         total_written += bytes_written;
-        printf("Записано %zd байт, всього: %zu байт\n", bytes_written, total_written);
+        printf("Written %zd bytes, total: %zu bytes\n", bytes_written, total_written);
 
         memset(buffer, 'B', BUFFER_SIZE); 
     }
@@ -51,6 +51,6 @@ int main() {
     }
     free(buffer);
 
-    printf("Програма завершена.\n");
+    printf("Program finished.\n");
     return 0;
 }
