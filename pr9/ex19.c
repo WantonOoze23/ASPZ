@@ -7,7 +7,7 @@ int main() {
         perror("setuid");
         return 1;
     }
-    printf("Виконую команду як root...\n");
+    printf("Executing command as root...\n");
     system("whoami"); 
     return 0;
 }
