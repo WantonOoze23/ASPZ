@@ -51,7 +51,7 @@ int main() {
         printf("File: %s ", test_files[i]);
         printf(" Read: %s ", try_read(test_files[i]) ? "A" : "D");
         printf(" Write:   %s ", try_write(test_files[i]) ? "A" : "D");
-        printf(" Execute: %s ", try_exec(test_files[i]) ? "A" : "D");
+        printf(" Execute: %s \n", try_exec(test_files[i]) ? "A" : "D");
     }
 
     return 0;
