@@ -20,11 +20,11 @@ int main(void) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
             continue;
         if (stat(entry->d_name, &st) == 0 && S_ISREG(st.st_mode)) {
-            printf("Видалити файл %s? (y/n): ", entry->d_name);
+            printf("Delete file %s? (y/n): ", entry->d_name);
             if (fgets(answer, sizeof(answer), stdin)) {
                 if (answer[0] == 'y' || answer[0] == 'Y') {
                     if (remove(entry->d_name) == 0) {
-                        printf("Файл %s видалено.\n", entry->d_name);
+                        printf("File %s deleted.\n", entry->d_name);
                     } else {
                         perror("remove");
                     }
