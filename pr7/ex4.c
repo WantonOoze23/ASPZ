@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
+        printf("===== %s =====\n", argv[i]);
         char line[1024];
         int count = 0;
         while (fgets(line, sizeof(line), f)) {
@@ -21,13 +22,12 @@ int main(int argc, char *argv[]) {
             count++;
             if (count == 20) {
                 printf("--More-- (Press Enter to continue)");
-                getchar();
+                while (getchar() != '\n'); 
                 count = 0;
             }
         }
-
+        printf("\n");
         fclose(f);
     }
     return 0;
 }
-
