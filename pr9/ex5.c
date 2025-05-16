@@ -20,7 +20,7 @@ int main() {
     
     printf("Changing owner and permissions automatically...\n");
     
-    snprintf(command, sizeof(command), "sudo chown root:root %s", fname);
+    snprintf(command, sizeof(command), "sudo chown root:wheel %s", fname);
     printf("Executing: %s\n", command);
     if (system(command) != 0) {
         printf("Failed to change owner. Make sure you have sudo privileges.\n");
@@ -58,6 +58,8 @@ int main() {
         printf("File removed successfully.\n");
     } else {
         printf("Failed to remove file, may need sudo: sudo rm %s\n", fname);
+        snprintf(command, sizeof(command), "sudo rm %s", fname);
+        system(command);
     }
     
     return 0;
