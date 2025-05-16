@@ -66,11 +66,11 @@ This incident has been reported to the administrator.
 **Реалізація:**  
 [`ex2.c`](ex2.c)
 
-![Результат виконання завдання 2 root](images/ex2.png)
+![Результат виконання завдання 2 root](images/ex2_1.png)
 
 ![Результат виконання завдання 2 user](images/ex2_user.png)
 
-![Результат виконання завдання 2 user](images/ex2_sudo_user.png)
+![Результат виконання завдання 2 sudo user](images/ex2_sudo_user.png)
 ---
 
 ## Завдання 3
@@ -176,6 +176,7 @@ This incident has been reported to the administrator.
 **Реалізація:**  
 [`ex19.c`](ex1c)
 
-![Результат виконання завдання 19](images/ex1png)
+![Результат виконання завдання 19](images/ex19_1.png)
 
+![Результат виконання завдання fail](images/ex19_fail.png)
 ---
