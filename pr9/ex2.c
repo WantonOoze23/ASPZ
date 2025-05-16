@@ -11,7 +11,7 @@ int main() {
         return 1;
     }
 
-    printf("/etc/shadow:\n");
+    printf("/etc/master.shadow:\n");
     while (fgets(line, sizeof(line), fp)) {
         printf("%s", line);
     }
