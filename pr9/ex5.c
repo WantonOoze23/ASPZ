@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <string.h>
 
 int main() {
     const char *fname = "/tmp/testfile_ex5.txt";
     FILE *fp;
-
+    char command[256];
+    
     fp = fopen(fname, "w");
     if (!fp) {
         perror("Failed to create file");
@@ -15,14 +17,27 @@ int main() {
     fprintf(fp, "Test string\n");
     fclose(fp);
     printf("File %s created by regular user.\n", fname);
-
-    printf("Changing owner and permissions (root required)...\n");
-    printf("Execute the following commands as root in the terminal:\n");
-    printf("sudo chown root:root %s\n", fname);
-    printf("sudo chmod 600 %s\n", fname);
-    printf("After that, press Enter to continue...\n");
-    getchar();
-
+    
+    printf("Changing owner and permissions automatically...\n");
+    
+    snprintf(command, sizeof(command), "sudo chown root:root %s", fname);
+    printf("Executing: %s\n", command);
+    if (system(command) != 0) {
+        printf("Failed to change owner. Make sure you have sudo privileges.\n");
+        remove(fname);
+        return 1;
+    }
+    
+    snprintf(command, sizeof(command), "sudo chmod 600 %s", fname);
+    printf("Executing: %s\n", command);
+    if (system(command) != 0) {
+        printf("Failed to change permissions.\n");
+        remove(fname);
+        return 1;
+    }
+    
+    printf("Owner and permissions changed successfully.\n");
+    
     fp = fopen(fname, "r");
     if (fp) {
         printf("File read: ALLOWED\n");
@@ -30,7 +45,7 @@ int main() {
     } else {
         printf("File read: DENIED\n");
     }
-
+    
     fp = fopen(fname, "a");
     if (fp) {
         printf("File write: ALLOWED\n");
@@ -38,8 +53,12 @@ int main() {
     } else {
         printf("File write: DENIED\n");
     }
-
-    remove(fname);
-
+    
+    if (remove(fname) == 0) {
+        printf("File removed successfully.\n");
+    } else {
+        printf("Failed to remove file, may need sudo: sudo rm %s\n", fname);
+    }
+    
     return 0;
 }
