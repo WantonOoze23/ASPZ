@@ -17,10 +17,10 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    close(pipefd[0]);
+
     char buffer[128 * 1024];
     memset(buffer, 'A', sizeof(buffer));
-
-    close(pipefd[0]);
 
     ssize_t count = write(pipefd[1], buffer, sizeof(buffer));
     if (count == -1) {
@@ -30,6 +30,7 @@ int main() {
     } else {
         printf("Requested to write %zu bytes, wrote all %zd bytes\n", sizeof(buffer), count);
     }
+    fflush(stdout);
 
     close(pipefd[1]);
     return 0;
