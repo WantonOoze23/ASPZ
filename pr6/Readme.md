@@ -8,11 +8,21 @@
 
 ## Як зібрати та запустити з AddressSanitizer
 
-1. **Скомпілюйте код з AddressSanitizer:**
+1.1 **Компіляція коду з -Wall:**
 
    ```
-   gcc -fsanitize=address -g ex19.c -o ex19.exe
+   cc -Wall ex19.c -o ex19.exe
    ```
+   ![Виконання для -Wall](pr6_1.jpg)
+
+1.2 **Компіляція коду з AddressSanitizer:**
+   ```
+   clang -fsanitize=address -O1 -g -fno-omit-frame-pointer -o ex19 19.c
+
+   ASAN_OPTIONS=detect_stack_use_after_return=1 ./ex19
+   ```
+
+   ![Виконання для -Wall](pr6_2.png)
 
 2. **Запустіть з перевіркою use-after-return:**
 
@@ -20,7 +30,7 @@
    set ASAN_OPTIONS=detect_stack_use_after_return=1
    .\ex19.exe
    ```
-
+   
 ## Результат
 
 AddressSanitizer виявить помилку use-after-return та виведе відповідне попередження у консолі.
