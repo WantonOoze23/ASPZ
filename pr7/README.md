@@ -61,7 +61,9 @@
 ---
 
 ## Результат роботи:
-![](images/4.png)
+![](images/ex4_1.png)
+![](images/ex4_2.png)
+![](images/ex4_3.png)
 
 ---
 
