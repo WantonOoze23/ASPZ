@@ -28,7 +28,6 @@ int main(void) {
     }
     closedir(dir);
 
-    // Сортування
     for (int i = 0; i < count - 1; i++) {
         for (int j = i + 1; j < count; j++) {
             if (strcmp(dirs[i], dirs[j]) > 0) {
@@ -38,8 +37,8 @@ int main(void) {
             }
         }
     }
-
-    // Вивід
+    
+    printf("Sorted directories:\n");
     for (int i = 0; i < count; i++) {
         printf("%s\n", dirs[i]);
         free(dirs[i]);
