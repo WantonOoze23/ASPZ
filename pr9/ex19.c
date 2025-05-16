@@ -4,6 +4,7 @@
 
 int main() {
     if (setuid(0) == -1) {
+        system("whoami");
         perror("setuid");
         return 1;
     }
