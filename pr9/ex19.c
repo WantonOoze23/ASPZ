@@ -8,6 +8,6 @@ int main() {
         return 1;
     }
     printf("Виконую команду як root...\n");
-    system("whoami"); // Виконує команду
+    system("whoami"); 
     return 0;
 }
