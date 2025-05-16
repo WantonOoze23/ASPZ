@@ -48,10 +48,10 @@ int main() {
 
     printf("\nChecking access to some files:\n");
     for (int i = 0; test_files[i]; ++i) {
-        printf("File: %s\n", test_files[i]);
-        printf("  Read: %s\n", try_read(test_files[i]) ? "ALLOWED" : "DENIED");
-        printf("  Write:   %s\n", try_write(test_files[i]) ? "ALLOWED" : "DENIED");
-        printf("  Execute: %s\n", try_exec(test_files[i]) ? "ALLOWED" : "DENIED");
+        printf("File: %s ", test_files[i]);
+        printf(" Read: %s ", try_read(test_files[i]) ? "A" : "D");
+        printf(" Write:   %s ", try_write(test_files[i]) ? "A" : "D");
+        printf(" Execute: %s ", try_exec(test_files[i]) ? "A" : "D");
     }
 
     return 0;

@@ -18,8 +18,8 @@ int main() {
 
     printf("Changing owner and permissions (root required)...\n");
     printf("Execute the following commands as root in the terminal:\n");
-    printf("  sudo chown root:root %s\n", fname);
-    printf("  sudo chmod 600 %s\n", fname);
+    printf("sudo chown root:root %s\n", fname);
+    printf("sudo chmod 600 %s\n", fname);
     printf("After that, press Enter to continue...\n");
     getchar();
 
