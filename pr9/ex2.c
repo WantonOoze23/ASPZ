@@ -5,7 +5,7 @@ int main() {
     FILE *fp;
     char line[1024];
 
-    fp = popen("sudo cat /etc", "r");
+    fp = popen("sudo cat /etc/master.shadow", "r");
     if (fp == NULL) {
         perror("Failed to execute sudo cat /etc/shadow");
         return 1;
