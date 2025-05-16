@@ -89,12 +89,23 @@ void scan_proc() {
 }
 
 void print_shared_files() {
-    printf("Files opened with few proceses:\n");
-    printf("=====================================\n");
+    printf("File opened with few proceses:\n");
+    printf("=======================================\n");
 
-    for (int i = 0; i < en#include <dirent.h>tr#include <string.h>].#include <unistd.h>%s (inode: %lu)\n", file_entries[i].filepath, file_entries[i].inode);
-            printf("  Процеси: ");
-            for (int j = 0; j < file_ent#include <ctype.h>rin"#define MAX_PIDS 128
-#define MAX_ENTRIES 4096  c(typedef struct {      ino_t inode;print_shared_files();
+    for (int i = 0; i < entry_count; ++i) {
+        if (file_entries[i].pid_count > 1) {
+            printf("File: %s (inode: %lu)\n", file_entries[i].filepath, file_entries[i].inode);
+            printf("  Proceses: ");
+            for (int j = 0; j < file_entries[i].pid_count; ++j) {
+                printf("%d ", file_entries[i].pids[j]);
+            }
+            printf("\n\n");
+        }
+    }
+}
+
+int main() {
+    scan_proc();
+    print_shared_files();
     return 0;
 }
