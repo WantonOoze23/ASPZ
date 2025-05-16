@@ -7,9 +7,11 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <ctype.h>
+#include <limits.h>
 
 #define MAX_PIDS 128
 #define MAX_ENTRIES 4096
+#define PATH_MAX 4096
 
 typedef struct {
     ino_t inode;
