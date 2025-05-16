@@ -22,15 +22,15 @@
    ASAN_OPTIONS=detect_stack_use_after_return=1 ./ex19
    ```
 
-   ![Виконання для -Wall](pr6_2.png)
+   ![Виконання для -fsanitize=address](pr6_2.png)
 
 2. **Запустіть з перевіркою use-after-return:**
 
    ```
-   set ASAN_OPTIONS=detect_stack_use_after_return=1
+   ASAN_OPTIONS=detect_stack_use_after_return=1
    .\ex19.exe
    ```
-   
+   ![Виконання для ASAN](pr6_3.png)
 ## Результат
 
 AddressSanitizer виявить помилку use-after-return та виведе відповідне попередження у консолі.
