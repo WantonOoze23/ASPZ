@@ -27,9 +27,9 @@ int main() {
     const char *groupname = gr ? gr->gr_name : "unknown";
 
     if (strcmp(username, TARGET_USERNAME) == 0 || strcmp(groupname, TARGET_GROUPNAME) == 0) {
-        printf("Пам’ять НЕ звільняється (Користувач: %s, Група: %s)\n", username, groupname);
+        printf("Memory is NOT freed (User: %s, group: %s)\n", username, groupname);
     } else {
-        printf("Пам’ять звільняється (Користувач: %s, Група: %s)\n", username, groupname);
+        printf("Memory is freed (User: %s, group: %s)\n", username, groupname);
         free(buffer);
     }
 
