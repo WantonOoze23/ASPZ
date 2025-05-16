@@ -17,8 +17,6 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    close(pipefd[0]);
-
     char buffer[128 * 1024];
     memset(buffer, 'A', sizeof(buffer));
 
@@ -32,6 +30,7 @@ int main() {
     }
     fflush(stdout);
 
+    close(pipefd[0]);
     close(pipefd[1]);
     return 0;
 }
