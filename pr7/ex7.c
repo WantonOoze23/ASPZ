@@ -6,7 +6,6 @@
 #include <string.h>
 
 int is_executable(const struct stat *st) {
-    // Файл є регулярним і має виконуваний біт для власника
     return S_ISREG(st->st_mode) && (st->st_mode & S_IXUSR);
 }
 
@@ -25,13 +24,13 @@ int main(void) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
             continue;
         if (stat(entry->d_name, &st) == 0 && is_executable(&st)) {
-            printf("Файл: %s\n", entry->d_name);
-            printf("Надати дозвіл на читання для інших? (y/n): ");
+            printf("File: %s\n", entry->d_name);
+            printf("Grant read permission to others? (y/n): ");
             if (fgets(answer, sizeof(answer), stdin)) {
                 if (answer[0] == 'y' || answer[0] == 'Y') {
                     mode_t new_mode = st.st_mode | S_IROTH;
                     if (chmod(entry->d_name, new_mode) == 0) {
-                        printf("Дозвіл надано.\n");
+                        printf("Permission granted.\n");
                     } else {
                         perror("chmod");
                     }
