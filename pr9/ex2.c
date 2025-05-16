@@ -5,10 +5,9 @@ int main() {
     FILE *fp;
     char line[1024];
 
-    // Використовуємо sudo для отримання доступу до /etc/shadow
     fp = popen("sudo cat /etc/shadow", "r");
     if (fp == NULL) {
-        perror("Не вдалося виконати sudo cat /etc/shadow");
+        perror("Failed to execute sudo cat /etc/shadow");
         return 1;
     }
 
