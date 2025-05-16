@@ -10,7 +10,7 @@ int main() {
         return 1;
     }
 
-    unsigned char data[] = {4, 5, 2, 2, 3, 3, 7, 9, 1, 5};
+    unsigned char data[] = {7, 8, 9, 1, 2, 3, 4, 5, 6, 1};
     if (write(fd, data, sizeof(data)) != sizeof(data)) {
         perror("write");
         return 1;
