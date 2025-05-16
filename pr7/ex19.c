@@ -1,113 +1,91 @@
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <ctype.h>
+#include <sys/types.h>
 #include <limits.h>
 
-#define MAX_PIDS 128
-#define MAX_ENTRIES 4096
-#define PATH_MAX 4096
+#define MAX_FILES 4096
+#define MAX_PIDS  128
 
 typedef struct {
-    ino_t inode;
-    char filepath[PATH_MAX];
+    char filename[PATH_MAX];
     pid_t pids[MAX_PIDS];
     int pid_count;
-} FileEntry;
+} FileUsage;
 
-FileEntry file_entries[MAX_ENTRIES];
-int entry_count = 0;
+FileUsage files[MAX_FILES];
+int file_count = 0;
 
-int is_number(const char *s) {
-    while (*s) {
-        if (!isdigit(*s++)) return 0;
-    }
-    return 1;
-}
-
-int find_or_create_entry(ino_t inode, const char *filepath) {
-    for (int i = 0; i < entry_count; ++i) {
-        if (file_entries[i].inode == inode &&
-            strcmp(file_entries[i].filepath, filepath) == 0) {
+int find_file(const char *filename) {
+    for (int i = 0; i < file_count; i++) {
+        if (strcmp(files[i].filename, filename) == 0)
             return i;
-        }
     }
-    if (entry_count >= MAX_ENTRIES) {
-        fprintf(stderr, "Too many unique files\n");
-        exit(1);
-    }
-    file_entries[entry_count].inode = inode;
-    strncpy(file_entries[entry_count].filepath, filepath, PATH_MAX);
-    file_entries[entry_count].pid_count = 0;
-    return entry_count++;
+    return -1;
 }
 
-void scan_proc() {
+void add_usage(const char *filename, pid_t pid) {
+    int idx = find_file(filename);
+    if (idx == -1) {
+        if (file_count >= MAX_FILES) return;
+        strncpy(files[file_count].filename, filename, PATH_MAX-1);
+        files[file_count].filename[PATH_MAX-1] = '\0';
+        files[file_count].pids[0] = pid;
+        files[file_count].pid_count = 1;
+        file_count++;
+    } else {
+        for (int i = 0; i < files[idx].pid_count; i++)
+            if (files[idx].pids[i] == pid) return;
+        if (files[idx].pid_count < MAX_PIDS)
+            files[idx].pids[files[idx].pid_count++] = pid;
+    }
+}
+
+int main(void) {
     DIR *proc = opendir("/proc");
     if (!proc) {
         perror("opendir /proc");
-        exit(1);
+        return 1;
     }
+    struct dirent *dent;
+    while ((dent = readdir(proc)) != NULL) {
+        if (dent->d_type != DT_DIR) continue;
+        pid_t pid = atoi(dent->d_name);
+        if (pid <= 0) continue;
 
-    struct dirent *entry;
-    while ((entry = readdir(proc)) != NULL) {
-        if (!is_number(entry->d_name)) continue;
-        pid_t pid = atoi(entry->d_name);
+        char fd_dir[PATH_MAX];
+        snprintf(fd_dir, sizeof(fd_dir), "/proc/%d/fd", pid);
+        DIR *fd = opendir(fd_dir);
+        if (!fd) continue;
 
-        char fd_path[64];
-        snprintf(fd_path, sizeof(fd_path), "/proc/%d/fd", pid);
-        DIR *fd_dir = opendir(fd_path);
-        if (!fd_dir) continue;
-
-        struct dirent *fd_entry;
-        while ((fd_entry = readdir(fd_dir)) != NULL) {
-            if (strcmp(fd_entry->d_name, ".") == 0 || strcmp(fd_entry->d_name, "..") == 0)
+        struct dirent *fdent;
+        while ((fdent = readdir(fd)) != NULL) {
+            if (strcmp(fdent->d_name, ".") == 0 || strcmp(fdent->d_name, "..") == 0)
                 continue;
+            char link_path[PATH_MAX], file_path[PATH_MAX];
+            snprintf(link_path, sizeof(link_path), "%s/%s", fd_dir, fdent->d_name);
+            ssize_t len = readlink(link_path, file_path, sizeof(file_path)-1);
+            if (len > 0) {
+                file_path[len] = '\0';
 
-            char link_path[128];
-            snprintf(link_path, sizeof(link_path), "%s/%s", fd_path, fd_entry->d_name);
-
-            char real_path[PATH_MAX];
-            ssize_t len = readlink(link_path, real_path, sizeof(real_path) - 1);
-            if (len == -1) continue;
-            real_path[len] = '\0';
-
-            struct stat st;
-            if (stat(real_path, &st) == -1) continue;
-
-            int index = find_or_create_entry(st.st_ino, real_path);
-            if (file_entries[index].pid_count < MAX_PIDS) {
-                file_entries[index].pids[file_entries[index].pid_count++] = pid;
+                if (strncmp(file_path, "/", 1) == 0)
+                    add_usage(file_path, pid);
             }
         }
-        closedir(fd_dir);
+        closedir(fd);
     }
     closedir(proc);
-}
 
-void print_shared_files() {
-    printf("File opened with few proceses:\n");
-    printf("=======================================\n");
-
-    for (int i = 0; i < entry_count; ++i) {
-        if (file_entries[i].pid_count > 1) {
-            printf("File: %s (inode: %lu)\n", file_entries[i].filepath, file_entries[i].inode);
-            printf("  Proceses: ");
-            for (int j = 0; j < file_entries[i].pid_count; ++j) {
-                printf("%d ", file_entries[i].pids[j]);
-            }
-            printf("\n\n");
+    printf("Files opened by multiple processes:\n");
+    for (int i = 0; i < file_count; i++) {
+        if (files[i].pid_count > 1) {
+            printf("%s :", files[i].filename);
+            for (int j = 0; j < files[i].pid_count; j++)
+                printf(" %d", files[i].pids[j]);
+            printf("\n");
         }
     }
-}
-
-int main() {
-    scan_proc();
-    print_shared_files();
     return 0;
 }
