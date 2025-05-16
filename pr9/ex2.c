@@ -5,13 +5,13 @@ int main() {
     FILE *fp;
     char line[1024];
 
-    fp = popen("sudo cat /etc/shadow", "r");
+    fp = popen("sudo cat /etc", "r");
     if (fp == NULL) {
         perror("Failed to execute sudo cat /etc/shadow");
         return 1;
     }
 
-    printf("Вміст /etc/shadow:\n");
+    printf("/etc/shadow:\n");
     while (fgets(line, sizeof(line), fp)) {
         printf("%s", line);
     }
