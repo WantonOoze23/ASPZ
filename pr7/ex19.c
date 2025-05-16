@@ -36,7 +36,6 @@ void add_usage(const char *filename, pid_t pid) {
         files[file_count].pid_count = 1;
         file_count++;
     } else {
-        // Перевірка на дублікати PID
         for (int i = 0; i < files[idx].pid_count; i++)
             if (files[idx].pids[i] == pid) return;
         if (files[idx].pid_count < MAX_PIDS)
@@ -70,7 +69,7 @@ int main(void) {
             ssize_t len = readlink(link_path, file_path, sizeof(file_path)-1);
             if (len > 0) {
                 file_path[len] = '\0';
-                // Фільтруємо тільки звичайні файли (не сокети, pipes тощо)
+
                 if (strncmp(file_path, "/", 1) == 0)
                     add_usage(file_path, pid);
             }
@@ -79,7 +78,7 @@ int main(void) {
     }
     closedir(proc);
 
-    printf("Файли, які відкриті кількома процесами:\n");
+    printf("Files opened by multiple processes:\n");
     for (int i = 0; i < file_count; i++) {
         if (files[i].pid_count > 1) {
             printf("%s :", files[i].filename);
