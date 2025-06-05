@@ -20,6 +20,6 @@ int main() {
         count++;
     }
 
-    printf("Створено процесів: %d\n", count);
+    printf("Processes created: %d\n", count);
     return 0;
 }
