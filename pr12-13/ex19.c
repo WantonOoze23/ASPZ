@@ -21,7 +21,7 @@ int main() {
         // Дочірній процес
         signal(SIGUSR1, sigusr1_handler);
         while (!got_sigusr1) pause();
-        printf("Child: отримав SIGUSR1\n");
+        printf("Child: got SIGUSR1\n");
         kill(getppid(), SIGUSR2);
         exit(0);
     } else {
@@ -30,7 +30,7 @@ int main() {
         sleep(1); // Таймаут
         kill(child, SIGUSR1);
         while (!got_sigusr2) pause();
-        printf("Parent: отримав SIGUSR2\n");
+        printf("Parent: got SIGUSR2\n");
         wait(NULL);
     }
     return 0;
