@@ -10,10 +10,8 @@ void handler(int sig, siginfo_t *info, void *ctx) {
 int main() {
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
-    
     sa.sa_sigaction = handler;
     sa.sa_flags = SA_SIGINFO;
-
     sigaction(SIGRTMIN, &sa, NULL);
     printf("Subscriber PID: %d\n", getpid());
     while (1) pause();
